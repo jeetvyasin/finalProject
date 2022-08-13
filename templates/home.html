@@ -66,6 +66,38 @@
                     document.getElementById('myChart'),
                     config
                 );
+
+                showLineChart();
+            }
+
+            function showLineChart() {
+                var labels = [];
+                var values = [];
+                for(var i=0; i<10; i++) {
+                    labels.push(dataObj[i].team);
+                    values.push(Number(dataObj[i].spi));
+                }
+                const data = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'SPI Line Chart',
+                        data: values,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                };
+
+                const config = {
+                    type: 'line',
+                    data: data,
+                };
+
+                const myChart = new Chart(
+                    document.getElementById('myLineChart'),
+                    config
+                );
+
             }
 
             function getCountryState() {
@@ -78,12 +110,13 @@
             }
             function createTable(countryInfo) {
                 const tableInfo = document.getElementById("tableInfo");
-                var str = "<table class='table-data'><thead><tr><th>Country</th><th>SPI</th><th>Offence</th><th>Defence</th><th>Rank</th></tr></thead>";
+                var str = "<table class='table-data'><thead><tr><th>Country</th><th>SPI</th><th>Offence</th><th>Defence</th><th>League</th><th>Rank</th></tr></thead>";
                 
                 str += "<tbody><tr><td>" + countryInfo[0].team + "</td>";
                 str += "<td>"+ countryInfo[0].spi + "</td>";
                 str += "<td>"+ countryInfo[0].off + "</td>";
                 str += "<td>"+ countryInfo[0].def + "</td>";
+                str += "<td>"+ countryInfo[0].confed + "</td>";
                 str += "<td>"+ countryInfo[0].rank + "</td></tr></tbody></table>";
                 
                 tableInfo.hidden = false;
@@ -95,9 +128,10 @@
     <body onload="callAPI()">
         <div class="mainpage">
             <h1><center>Welcome!</center></h1>
-            <div style="width: 400px;height: 400px;">
+            <div style="width: 400px;height: 400px;margin:0 auto;">
                 <canvas id="myChart"></canvas>
             </div>
+            <p>The above chart shows how much participation each league has from all over the world. 56 countries as we can see take participation in UEFA champtionship league. Most of them are european countries.</p>
             <div class="top-section">
                 <div class="left-section">
                     <div>Top 10 Football Countries</div>
@@ -110,6 +144,14 @@
                     </div>
                 </div>
             </div> 
+            <div style="width: 400px;margin:0 auto;">
+                <canvas id="myLineChart"></canvas>
+            </div>
+            <!-- <div class="middle-section">
+                <div class="positive-kd">
+                    <h2>Countries which has postive to offence to defence ratios.</h2>
+                </div>
+            </div> -->
             <div class="bottom-section">
                 <input class="input-search" type="text" id="search" name="search" value="" placeholder="Enter any countries name">
                 <button class="button-search"  type="button" onclick="getCountryState()">Search</button>

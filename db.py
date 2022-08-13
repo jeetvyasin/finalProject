@@ -44,3 +44,33 @@ def add_data(data):
             cursor.execute('INSERT INTO spiteam (rankteam, offe, def, spi, team, confed) VALUES(%s, %s, %s, %s, %s, %s)', (int(row["rank"]), float(row["off"]), float(row["def"]), float(row["spi"]), row["name"], row["confed"]))
     conn.commit()
     conn.close()
+
+def get_Item_Country(countryName):
+    conn = open_connection();
+    with conn.cursor() as cursor:
+        result = cursor.execute("SELECT * FROM spiteam WHERE team = %s", (countryName,));
+        data = cursor.fetchall()
+
+    if result > 0:
+        got_songs = jsonify(data)
+    else:
+        got_songs = 'No Data in DB.'
+
+    return data;
+
+def getRangeData(min, max):
+    conn = open_connection();
+    with conn.cursor() as cursor:
+        result = cursor.execute("SELECT * FROM spiteam WHERE id >= %s and id < %s", (min,max,));
+        data = cursor.fetchall()
+
+    if result > 0:
+        got_songs = jsonify(data)
+    else:
+        got_songs = 'No Data in DB.'
+
+    return data;
+    
+    
+
+
