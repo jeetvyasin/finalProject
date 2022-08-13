@@ -1,0 +1,13 @@
+<html>
+    <head>
+        <script>
+            const callAPI = async() => {
+                const response = await fetch('/loadData');
+                console.log(response);
+            }
+        </script>
+    </head>
+    <body>
+        <button onclick="callAPI()">Click me to Load the data!!!</button>
+    </body>
+</html>

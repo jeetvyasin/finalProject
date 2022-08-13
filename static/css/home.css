@@ -1,0 +1,42 @@
+.top-section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.left-section {
+    flex-grow: 1;
+    background-color: beige;
+    border-radius: 0.5rem;
+    margin: 2rem;
+}
+
+.right-section {
+    flex-grow: 1;
+    background-color: beige;
+    border-radius: 0.5rem;
+    margin: 2rem;
+}
+
+.bottom-section {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.table-data {
+    margin: 0 auto;
+}
+
+.input-search, .button-search {
+    width: 20rem;
+    height: 2rem;
+}
+
+.button-search {
+    margin-left: 1rem;
+    width: 5rem;
+}
+
+th,td {
+    width: 5rem;
+}

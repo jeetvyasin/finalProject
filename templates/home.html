@@ -1,0 +1,122 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            var dataObj = [];
+            const callAPI = async() => {
+                fetch("/getData").then((response) => {return response.json()}).then(data => {
+                    const listElem1 = document.getElementById("top-countries");
+                    const listElem2 = document.getElementById("bottom-countries");
+
+                    var topstr = "<ul>";
+                    var bottomstr = "<ul>";
+                    // only top 10
+                    var i = 0;
+                    do {
+                        topstr += '<li>' + data.data[i]['team'] + '</li>';
+                        bottomstr += '<li>' + data.data[data.data.length - i - 1]['team'] + '</li>';
+                        i++
+                    } while (i < 10);
+                    
+
+                    topstr += "</ul>"
+                    bottomstr += "</ul>"
+
+                    listElem1.innerHTML = topstr;
+                    listElem2.innerHTML = bottomstr;
+                    dataObj = data.data;
+                    loadChart();
+                });
+            }
+
+            function countValue(arr, value) {
+                    return arr.filter(x => x.confed === value).length
+            }
+
+            function loadChart() {
+                uefaValue = countValue(dataObj, 'UEFA');
+                conValue = countValue(dataObj, 'CONMEBOL');
+                otherValue = dataObj.length - uefaValue - conValue;
+
+                const data = {
+                labels: [
+                    'UEFA',
+                    'CONMEBOL',
+                    'Other'
+                ],
+                datasets: [{
+                    label: 'League Distribution',
+                    data: [uefaValue, conValue, otherValue],
+                    backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)'
+                    ],
+                    hoverOffset: 4
+                }]
+                };
+
+                const config = {
+                    type: 'pie',
+                    data: data,
+                };
+
+                const myChart = new Chart(
+                    document.getElementById('myChart'),
+                    config
+                );
+            }
+
+            function getCountryState() {
+                console.log(dataObj);
+                const val = document. querySelector('input').value;
+                const countryInfo = dataObj.filter((elem) => {
+                    return elem.team.toLowerCase().trim() == val.toLowerCase().trim()
+                });
+                createTable(countryInfo);
+            }
+            function createTable(countryInfo) {
+                const tableInfo = document.getElementById("tableInfo");
+                var str = "<table class='table-data'><thead><tr><th>Country</th><th>SPI</th><th>Offence</th><th>Defence</th><th>Rank</th></tr></thead>";
+                
+                str += "<tbody><tr><td>" + countryInfo[0].team + "</td>";
+                str += "<td>"+ countryInfo[0].spi + "</td>";
+                str += "<td>"+ countryInfo[0].off + "</td>";
+                str += "<td>"+ countryInfo[0].def + "</td>";
+                str += "<td>"+ countryInfo[0].rank + "</td></tr></tbody></table>";
+                
+                tableInfo.hidden = false;
+                tableInfo.innerHTML = str;
+                
+            }
+        </script>
+    </head>
+    <body onload="callAPI()">
+        <div class="mainpage">
+            <h1><center>Welcome!</center></h1>
+            <div style="width: 400px;height: 400px;">
+                <canvas id="myChart"></canvas>
+            </div>
+            <div class="top-section">
+                <div class="left-section">
+                    <div>Top 10 Football Countries</div>
+                    <div id="top-countries">
+                    </div>
+                </div>
+                <div class="right-section">
+                    <div>Bottom Countries</div>
+                    <div id="bottom-countries">
+                    </div>
+                </div>
+            </div> 
+            <div class="bottom-section">
+                <input class="input-search" type="text" id="search" name="search" value="" placeholder="Enter any countries name">
+                <button class="button-search"  type="button" onclick="getCountryState()">Search</button>
+            </div>
+            <div class="hidden-table" id="tableInfo" hidden>
+
+            </div>
+        </div>
+    </body>
+</html>
