@@ -7,6 +7,7 @@ app = Flask(__name__)
 
 isDataLoaded = False;
 
+# Data Source
 URL = "https://projects.fivethirtyeight.com/soccer-api/international/spi_global_rankings_intl.csv";
 
 def loadDataFromURL():
